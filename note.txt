@@ -1,0 +1,75 @@
+api 특이사항
+- status
+전체 상점 상세 정보 조회, 특정 상점 정보 조회, 키오스크 정보 조회 api : query와 output form이 너무 꼬여있어 구현할수는 있으나 의미 없다고 판단
+백엔드에서 데이터를 해당 형식으로 변환하여 전달하는 것보다 프론트에서 데이터를 핸들링하는 것이 서버 부하 및 response time에 유리.
+기본적인 select문, column의 renaming은 가능하나 해당 구조로 전달 불가
+
+- verify
+모바일 신분증 바코드 읽기, 모바일 신분증 QR 확인, 휴대폰 본인인증 확인 request body의 내용을 알 수 없어 테스트 불가.
+
+- kiosk
+위챗페이 관련 api를 따로 분리, 주로 쓰이는 함수역시 같은 이름의 service로 분리, api 일부만 구현
+
+models/logModel.js 파일
+그냥 기타 애매한 쿼리문이 쌓여있는 것으로 사료됨, service 레이어로 분류해 호출 및 저장하는 것으로 판단.
+kiosk 관련 api에서 호출하는 것들은 전부 controller에서 처리하는 것으로 변경.
+
+jwt, bcrypt : 세팅은 되어 있으나 실제로 사용하지 않는 것으로 판단됨.
+현재 구현되어있는 jwt 관련 모듈이나 function이 전부 사용성이 없다고 판단되어 따로 구현하지 않음.
+
+log 파일
+기본적으로 에러 로그를 log를 파일로 쌓고 날짜별로 조회할 수 있도록 세팅해둠
+sql 쿼리 내역 또한 같은 파일에서 log를 확인 가능하도록 세팅
+기존방식의 로그 역시 consoleLog.js 파일에 따로 정의해둠
+
+swagger
+스웨거를 붙이고 3가지 api 예시 작성,
+http://localhost:3000/api-docs/#/ 혹은 openapi.yaml 파일을 사용해서 볼 수 있음
+openapi.yaml 파일은 서버 재시작시 마다 rewrite됨
+
+db connnection
+기존에 db 쿼리시마다 새 connection을 호출했는데 대신 sequelize를 사용해 앱 시작시 디비도 시작함
+config/database.js 파일에서 시작
+MTS_SMS_MSG 데이터베이스는 연동하지 않음
+
+.env
+.env를 사용해 환경 설정을 세팅, DB connection 정보 등 민감한 정보를 기록
+
+nodemon
+nodemon을 추가해 수정마다 서버를 새로 시작할 필요 없이 수정되는 내용을 현재 돌아가는 서버에 반영
+npm run dev로 시작
+
+socket
+utils/socket 폴더에 있는 파일 중 redis.js는 사용하지 않는 방향으로 수정
+websocket.js 파일은 일부 코드를 정리(메인함수의 경우 정리하는 데 시간이 오래 걸릴 것 같아 정리하지 않음)
+
+datetime 형식(dayjs)
+일단 기본값대로 두었으나 'YY-MM-DD HH:mm:ss'으로 변경 가능한 것을 확인
+
+config/constants.js
+여러 파일에 걸쳐 사용하는 고정값 정의 .env에 넣는 정보들 보다 덜 민감한 정보들로 구성
+
+기존 root 디렉토리 내 congfig.js 파일
+보안에 취약하며 쓸모 없다고 판단되어 .env로 이관
+
+http status code
+현재 get이어야할 api가 post로 되어있는 등 http methods가 맞지 않아 200으로 두었음
+
+
+
+백엔드 코드 관리
+1. 안쓰는 변수는 그때그때 정리, 불필요한 console.log 최소화
+2. 라우터는 미들웨어, 컨트롤러 등 비즈니스 로직과의 연결작업과 swagger 문서만 포함
+3. 자주 쓰이는 쿼리문의 경우 service를 등록해 사용
+4. 보안상 중요한 정보들은 .env 파일에, .env를 사용할 경우 set되지 않았을 시 사용할 기본값을 변수 선언 시 지정
+5. 보안상 덜 중요하나 여러개의 파일에서 쓰는 고정값들은 각 파일의 상단이 아닌 config/constants에서 접근(값의 일관성 및 수정 간편화를 위해)
+6. 컨트롤러의 각 함수 위에 기능에 대한 캡션 달기
+7. validation은 최대한 재사용이 가능하도록 작성
+8. 사용하지 않거나 잘못 설치한 package는 즉시 삭제
+9. 가능하면 eslint와 prettier 사용
+10. commonJS 대신 ES6 모듈 방식 사용
+11. 가능하면 snake case 대신 camel case 사용
+12. api 버전 정보 기재(v1, v2 등의 형식으로 url에 포함)
+13. redis, RDBMS 등에 연결하는 로직은 config 폴더 내부에, 그 외 기능(log, socker, swagger 옵션 설정)은 utils 폴더 내부에 정의
+14. 주석의 경우 가능하면 코드 윗부분에 추가
+15. put, patch, post 의 경우 성공시 201을 return, get은 200, validation error는 422, model 또는 url이 없을 경우 404, 쿼리에러는 400을 사용, 코드 내에서 500은 일부러 내지 않음
