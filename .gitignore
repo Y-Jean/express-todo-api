@@ -3,4 +3,4 @@
 .env
 
 /config/keys/*
-!path/to/your/folder/.gitkeep
+!/config/keys/.gitkeep
