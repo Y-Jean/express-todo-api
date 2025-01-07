@@ -1,4 +1,4 @@
-import { User, Task } from "../models/index.js";
+// import db from "../models/index.js";
 
 const getTaskList = async (req, res) => {
   res.status(200).json({});

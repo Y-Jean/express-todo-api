@@ -18,6 +18,7 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
+      unique: true,
       comment: "이메일",
     },
     password: {

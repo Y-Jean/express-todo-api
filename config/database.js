@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
+import { queryLogger } from "../utils/logger.js";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
+    logging: (sql) => queryLogger.info(sql),
   }
 );
 
