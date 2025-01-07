@@ -1,8 +1,8 @@
-import { User } from "../models/index.js";
+import db from "../models/index.js";
 
 // 사용자 리스트 조회
 const getUserList = async (req, res) => {
-  const users = await User.findAll({
+  const users = await db.User.findAll({
     attributes: ["id", "name", "email"],
   });
 
@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await User.findByPk(userId, {
+    const user = await db.User.findByPk(userId, {
       attributes: ["id", "name", "email"],
     });
 

@@ -1,12 +1,14 @@
 import express from "express";
-const router = express.Router();
 import * as authController from "../controllers/authController.js";
-import * as authMiddleware from "../middlewares/validations/authMiddleware.js";
+import * as authValidation from "../validations/authValidation.js";
 import JWTMiddleware from "../middlewares/JWTMiddleware.js";
+import validate from "../middlewares/validate.js";
+
+const router = express.Router();
 
 /**
  * @openapi
- * /v1/auth/signup:
+ * /v1/auth/register:
  *   post:
  *     tags:
  *       - 회원 관리
@@ -41,7 +43,7 @@ import JWTMiddleware from "../middlewares/JWTMiddleware.js";
  *               - password
  *               - confirmPassword
  *     responses:
- *       200:
+ *       201:
  *         description: 회원가입 완료
  *         content:
  *           application/json:
@@ -79,22 +81,108 @@ import JWTMiddleware from "../middlewares/JWTMiddleware.js";
  *                   type: string
  *                   example: "이미 존재하는 이메일입니다."
  */
-router.post("/signup", authMiddleware.signupValidation, authController.signup);
-
-router.delete(
-  "/delete",
-  [JWTMiddleware, authMiddleware.passwordValidation],
-  authController.deleteAccount
+router.post(
+  "/register",
+  validate(authValidation.register),
+  authController.register
 );
 
-router.post("/login", authMiddleware.loginValidation, authController.login);
+/**
+ * @openapi
+ * /v1/auth/login:
+ *   post:
+ *     tags:
+ *       - 회원 관리
+ *     summary: 로그인
+ *     description: 로그인합니다.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: saaraam1@example.com
+ *                 description: 사용자 이메일
+ *               password:
+ *                 type: string
+ *                 example: Tkfka123!@
+ *                 description: 사용자 비밀번호
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: 로그인 완료
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: success
+ *       401:
+ *         description: 입력값 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 {
+ *                   "status": "error",
+ *                   "statusCode": 401,
+ *                   "message": "비밀번호가 일치하지 않습니다."
+ *                 }
+ *       404:
+ *         description: 사용자가 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 {
+ *                   "status": "error",
+ *                   "statusCode": 404,
+ *                   "message": "사용자가 존재하지 않습니다."
+ *                 }
+ */
+router.post("/login", validate(authValidation.login), authController.login);
 
-router.put(
-  "/update-password",
-  [JWTMiddleware, authMiddleware.updatePasswordValidation],
-  authController.updatePassword
-);
-
-router.put("/update", authController.updateProfile);
+/**
+ * @openapi
+ * /v1/auth/logout:
+ *   post:
+ *     tags:
+ *       - 회원 관리
+ *     summary: 로그아웃
+ *     description: 로그아웃합니다.
+ *     responses:
+ *       200:
+ *         description: 로그아웃 완료
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: success
+ *       401:
+ *         description: 입력값 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 {
+ *                   "status": "error",
+ *                   "statusCode": 401,
+ *                   "message": "이미 로그아웃된 사용자입니다."
+ *                 }
+ */
+router.post("/logout", JWTMiddleware, authController.logout);
 
 export default router;

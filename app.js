@@ -1,19 +1,19 @@
-import createError from "http-errors";
-import express from "express";
-import path from "path";
 import cookieParser from "cookie-parser";
-import logger from "morgan";
+import createError from "http-errors";
 import dotenv from "dotenv";
+import express from "express";
+import logger from "morgan";
+import path from "path";
+import db from "./models/index.js";
+import redisClient from "./config/redis.js";
+import swaggerDocs from "./utils/swagger.js";
+import { errorHandler } from "./middlewares/error.js";
 
 // 라우터 임포트
 import indexRouter from "./routes/index.js";
-import usersRouter from "./routes/users.js";
-import tasksRouter from "./routes/tasks.js";
 import authRouter from "./routes/auth.js";
-
-import swaggerDocs from "./utils/swagger.js";
-import { sequelize } from "./models/index.js";
-import redisClient from "./config/redis.js";
+import tasksRouter from "./routes/tasks.js";
+import usersRouter from "./routes/users.js";
 
 const app = express();
 
@@ -42,7 +42,7 @@ app.use(`/${version}/auth`, authRouter);
 const PORT = process.env.PORT || 3000;
 
 // 데이터베이스 연결, 서버 시작
-sequelize
+db.sequelize
   .sync()
   .then(() => {
     app.listen(PORT, () => {
@@ -78,5 +78,7 @@ app.use(function (err, req, res) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+app.use(errorHandler);
 
 export default app;
