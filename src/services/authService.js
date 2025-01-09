@@ -45,7 +45,7 @@ const login = async (email, password) => {
   };
 
   // 암호화 key 가져오기
-  const primaryKey = fs.readFileSync(`config/${constants.JWT.PRIVATE_KEY}`);
+  const primaryKey = fs.readFileSync(`src/config/${constants.JWT.PRIVATE_KEY}`);
 
   // accessToken 생성
   const accessToken = jwt.sign(payload, primaryKey, {
