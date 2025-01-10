@@ -27,8 +27,8 @@ sequelize db:migrate
 // seed 생성 (선택사항)
 sequelize db:seed:all
 // ES256 key pair 생성
-openssl ecparam -name prime256v1 -genkey -noout -out config/keys/private.pem
-openssl ec -in config/keys/private.pem -pubout -out config/keys/public.pem
+openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
+openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem
 // 개발환경으로 실행
 npm run dev
 ```
