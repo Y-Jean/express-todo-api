@@ -1,6 +1,10 @@
 import express from "express";
-const router = express.Router();
 import * as userController from "../controllers/userController.js";
+import * as userValidation from "../validations/userValidation.js";
+import JWTMiddleware from "../middlewares/JWTMiddleware.js";
+import validate from "../middlewares/validate.js";
+
+const router = express.Router();
 
 /**
  * @openapi
@@ -77,5 +81,19 @@ router.get("/", userController.getUserList);
  *                 email: "john.doe@example.com"
  */
 router.get("/:userId", userController.getUser);
+
+router.delete(
+  "/deleteAccount",
+  [JWTMiddleware, validate(userValidation.password)],
+  userController.deleteAccount
+);
+
+router.put(
+  "/updatePassword",
+  [JWTMiddleware, validate(userValidation.updatePassword)],
+  userController.updatePassword
+);
+
+router.put("/updateProfile", JWTMiddleware, userController.updateProfile);
 
 export default router;

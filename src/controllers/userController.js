@@ -1,4 +1,6 @@
+import status from "http-status";
 import db from "../models/index.js";
+import userService from "../services/userService.js";
 
 // 사용자 리스트 조회
 const getUserList = async (req, res) => {
@@ -32,4 +34,40 @@ const getUser = async (req, res) => {
   }
 };
 
-export { getUserList, getUser };
+const deleteAccount = async (req, res, next) => {
+  try {
+    await userService.deleteAccount(req.user);
+    res.status(status.OK).json({
+      message: "success",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateProfile = async (req, res, next) => {
+  try {
+    await userService.updateProfile(req.user, req.body);
+    res.status(status.OK).json({
+      message: "success",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updatePassword = async (req, res, next) => {
+  const user = req.user;
+  const { newPassword } = req.body;
+
+  try {
+    await userService.updatePassword(user, newPassword);
+    res.status(status.OK).json({
+      message: "success",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { getUserList, getUser, deleteAccount, updateProfile, updatePassword };
