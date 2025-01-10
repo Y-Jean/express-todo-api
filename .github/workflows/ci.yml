@@ -32,8 +32,8 @@ jobs:
           sudo apt-get install -y mariadb-server
           sudo service mysql start
           mysql -e "CREATE DATABASE todo;"
-          mysql -e "CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';"
-          mysql -e "GRANT ALL PRIVILEGES ON todo.* TO 'root'@'localhost';"
+          mysql -e "CREATE USER 'runner'@'localhost' IDENTIFIED BY 'password';"
+          mysql -e "GRANT ALL PRIVILEGES ON todo.* TO 'runner'@'localhost';"
           mysql -e "FLUSH PRIVILEGES;"
 
       - name: Set up Redis
