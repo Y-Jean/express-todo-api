@@ -33,7 +33,7 @@ jobs:
         env:
           MARIADB_ROOT_PASSWORD: 1234
           MARIADB_DATABASE: todo
-          MARIADB_USER: root
+          MARIADB_USER: test
           MARIADB_PASSWORD: 1234
 
     steps:
