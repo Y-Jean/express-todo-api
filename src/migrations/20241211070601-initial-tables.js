@@ -1,7 +1,7 @@
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
     // create users table
     await queryInterface.createTable("users", {
