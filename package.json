@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env DEBUG=express-to-api:* && node ./bin/www",
     "dev": "cross-env DEBUG=express-to-api:* && nodemon ./bin/www",
-    "test:ci": "cross-env DEBUG=express-to-api:* node ./bin/www"
+    "test:ci": "cross-env DEBUG=express-to-api:* node ./bin/www && sleep 5 && kill $(lsof -t -i:3000)"
   },
   "dependencies": {
     "argon2": "^0.41.1",
