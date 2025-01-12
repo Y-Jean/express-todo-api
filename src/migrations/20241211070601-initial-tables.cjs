@@ -26,7 +26,7 @@ module.exports = {
         comment: "비밀번호",
       },
       failCount: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.SMALLINT,
         field: "fail_count",
         defaultValue: 0,
         comment: "로그인 실패 횟수",
