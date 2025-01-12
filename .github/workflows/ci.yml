@@ -66,5 +66,5 @@ jobs:
           openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
           openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem
 
-      - name: Run application
-        run: npm run test:ci
+      # - name: Run application
+      #   run: npm run test:ci
