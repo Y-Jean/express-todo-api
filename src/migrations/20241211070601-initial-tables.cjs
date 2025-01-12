@@ -1,7 +1,7 @@
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
     // create users table
     await queryInterface.createTable("users", {
@@ -26,7 +26,7 @@ export default {
         comment: "비밀번호",
       },
       failCount: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.SMALLINT,
         field: "fail_count",
         defaultValue: 0,
         comment: "로그인 실패 횟수",

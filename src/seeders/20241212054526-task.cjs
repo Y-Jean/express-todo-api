@@ -1,7 +1,7 @@
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
       "tasks",

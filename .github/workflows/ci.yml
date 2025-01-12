@@ -1,0 +1,70 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U $POSTGRES_USER || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        env:
+          POSTGRES_DB: todo
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Copy .env.ci
+        run: cp .env.ci .env
+
+      - name: Run migrations
+        run: npx sequelize db:migrate --config src/config/config.js --migrations-path src/migrations
+
+      - name: Seed database
+        run: npx sequelize db:seed:all --config src/config/config.js --seeders-path src/seeders
+
+      - name: Install OpenSSL
+        run: sudo apt-get update && sudo apt-get install -y openssl
+
+      - name: Generate ES256 key pair
+        run: |
+          mkdir -p src/config/keys
+          openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
+          openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem
+
+      # - name: Run application
+      #   run: npm run test:ci
