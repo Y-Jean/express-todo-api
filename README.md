@@ -13,7 +13,7 @@
 
 - Framework: Express
 - Cache Server: redis
-- DBMS: mariaDB
+- DBMS: postgreSQL
 - ORM: Sequelize
 
 ## install(dev)
