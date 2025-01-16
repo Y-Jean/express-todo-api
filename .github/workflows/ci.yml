@@ -45,7 +45,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 23
 
       - name: Install dependencies
         run: npm install
@@ -55,9 +55,6 @@ jobs:
 
       - name: Set NODE_ENV to development
         run: echo "NODE_ENV=development" >> $GITHUB_ENV
-
-      - name: Run build
-        run: npm run build
 
       - name: Run migrations
         run: npm run migrate
