@@ -53,6 +53,9 @@ jobs:
       - name: Copy .env.ci
         run: cp .env.ci .env
 
+      - name: Set NODE_ENV to development
+        run: echo "NODE_ENV=development" >> $GITHUB_ENV
+
       - name: Run build
         run: npm run build
 
