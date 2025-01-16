@@ -6,7 +6,9 @@
   "scripts": {
     "start": "cross-env DEBUG=express-to-api:* && node ./bin/www",
     "dev": "cross-env DEBUG=express-to-api:* && nodemon ./bin/www",
-    "test:ci": "cross-env DEBUG=express-to-api:* node ./bin/www && sleep 5 && kill $(lsof -t -i:3000)"
+    "test:ci": "cross-env DEBUG=express-to-api:* node ./bin/www && sleep 5 && kill $(lsof -t -i:3000)",
+    "migrate": "npx babel-node node_modules/.bin/sequelize db:migrate --config src/config/config.js --migrations-path src/migrations",
+    "seed": "npx babel-node node_modules/.bin/sequelize-cli db:seed:all --config src/config/config.js --seeders-path src/seeders"
   },
   "dependencies": {
     "argon2": "^0.41.1",
@@ -38,7 +40,11 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@eslint/js": "^9.17.0",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.31.0",
