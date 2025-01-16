@@ -23,9 +23,9 @@ npm install
 // .env 파일 생성
 cp .env.example .env
 // 데이터베이스 마이그레이션
-npx sequelize-cli db:migrate --config src/config/config.js --migrations-path src/migrations
+npx babel-node node_modules/.bin/sequelize --config src/config/config.js --migrations-path src/migrations
 // seed 생성 (선택사항)
-npx sequelize-cli db:seed:all --config src/config/config.json --seeders-path src/seeders
+npx babel-node node_modules/.bin/sequelize --config src/config/config.json --seeders-path src/seeders
 // ES256 key pair 생성
 openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
 openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem

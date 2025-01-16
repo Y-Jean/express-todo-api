@@ -52,10 +52,10 @@ jobs:
         run: cp .env.ci .env
 
       - name: Run migrations
-        run: npx sequelize db:migrate --config src/config/config.js --migrations-path src/migrations
+        run: npm run migrate
 
       - name: Seed database
-        run: npx sequelize db:seed:all --config src/config/config.js --seeders-path src/seeders
+        run: npm run seed
 
       - name: Install OpenSSL
         run: sudo apt-get update && sudo apt-get install -y openssl
