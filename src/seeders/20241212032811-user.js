@@ -1,8 +1,8 @@
 "use strict";
-const argon2 = require("argon2");
+import argon2 from "argon2";
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface) {
     // 비밀번호 해싱
     const password = await argon2.hash("Todo1234!@");

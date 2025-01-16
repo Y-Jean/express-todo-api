@@ -3,5 +3,4 @@
 
 .env
 
-/config/keys/*
-!/config/keys/.gitkeep
+/src/config/keys/*.pem

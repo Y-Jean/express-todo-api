@@ -10,6 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: development
 
     services:
       redis:
@@ -43,7 +45,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 23
 
       - name: Install dependencies
         run: npm install
@@ -51,11 +53,14 @@ jobs:
       - name: Copy .env.ci
         run: cp .env.ci .env
 
+      - name: Set NODE_ENV to development
+        run: echo "NODE_ENV=development" >> $GITHUB_ENV
+
       - name: Run migrations
-        run: npx sequelize db:migrate --config src/config/config.js --migrations-path src/migrations
+        run: npm run migrate
 
       - name: Seed database
-        run: npx sequelize db:seed:all --config src/config/config.js --seeders-path src/seeders
+        run: npm run seed
 
       - name: Install OpenSSL
         run: sudo apt-get update && sudo apt-get install -y openssl
