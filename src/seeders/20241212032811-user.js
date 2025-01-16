@@ -1,5 +1,5 @@
 "use strict";
-const argon2 = require("argon2");
+import argon2 from "argon2";
 
 /** @type {import('sequelize-cli').Migration} */
 export default {

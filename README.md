@@ -37,13 +37,13 @@ npm run dev
 ```bash
 // .env 파일 생성
 cp .env.example .env
+// ES256 key pair 생성
+openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
+openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem
 docker compose build
 docker compose up -d
 // 데이터베이스 마이그레이션
 docker compose exec todo-app npm run migrate
 // seed 생성 (선택사항)
 docker compose exec todo-app npm run seed
-// ES256 key pair 생성
-docker compose exec todo-app openssl ecparam -name prime256v1 -genkey -noout -out src/config/keys/private.pem
-docker compose exec todo-app openssl ec -in src/config/keys/private.pem -pubout -out src/config/keys/public.pem
 ```

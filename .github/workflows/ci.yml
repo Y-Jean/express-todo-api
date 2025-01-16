@@ -53,6 +53,9 @@ jobs:
       - name: Copy .env.ci
         run: cp .env.ci .env
 
+      - name: Run build
+        run: npm run build
+
       - name: Run migrations
         run: npm run migrate
 

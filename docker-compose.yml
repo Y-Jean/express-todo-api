@@ -13,6 +13,8 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=todo
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - NODE_ENV=development
     depends_on:
       - postgres

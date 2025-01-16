@@ -7,8 +7,9 @@
     "start": "cross-env DEBUG=express-to-api:* && node ./bin/www",
     "dev": "cross-env DEBUG=express-to-api:* && nodemon ./bin/www",
     "test:ci": "cross-env DEBUG=express-to-api:* node ./bin/www && sleep 5 && kill $(lsof -t -i:3000)",
+    "build": "babel src --out-dir dist --extensions \".js\"",
     "migrate": "npx babel-node node_modules/.bin/sequelize db:migrate --config src/config/config.js --migrations-path src/migrations",
-    "seed": "npx babel-node node_modules/.bin/sequelize-cli db:seed:all --config src/config/config.js --seeders-path src/seeders"
+    "seed": "npx babel-node node_modules/.bin/sequelize db:seed:all --config src/config/config.js --seeders-path src/seeders"
   },
   "dependencies": {
     "argon2": "^0.41.1",
